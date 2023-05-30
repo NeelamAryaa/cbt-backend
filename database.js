@@ -3,9 +3,28 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const axios = require("axios");
+// const axios = require("axios");
 const PORT = process.env.PORT || 8080;
-const BASE_URL = process.env.BASE_URL;
+
+var pg = require("pg");
+
+var conString =
+  // "postgres://vuyeeooi:xTfmMuovk2vTOJs4NJh28rU7mWFXA9jp@rajje.db.elephantsql.com/vuyeeooi";
+  "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt";
+var con = new pg.Client(conString);
+con.connect(function (err) {
+  if (err) {
+    return console.error("could not connect to postgres", err);
+  }
+  con.query('SELECT NOW() AS "theTime"', function (err, result) {
+    if (err) {
+      return console.error("error running query", err);
+    }
+    console.log(result.rows[0].theTime);
+    // >> output: 2018-08-23T14:02:57.117Z
+    // con.end();
+  });
+});
 
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign, verify, decode } = require("jsonwebtoken");
@@ -15,12 +34,13 @@ dotenv.config({ path: "./.env" });
 const { createConnection } = require("mysql2");
 const dayjs = require("dayjs");
 
-const con = createConnection({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE,
-});
+// const con = createConnection({
+//   host: process.env.DATABASE_HOST,
+//   user: process.env.DATABASE_USER,
+//   password: process.env.DATABASE_PASSWORD,
+//   database: process.env.DATABASE,
+//   port: process.env.PORT,
+// });
 
 app.use(cors());
 
