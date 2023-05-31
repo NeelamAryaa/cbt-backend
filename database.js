@@ -101,7 +101,7 @@ app.post("/auth/register", (req, res) => {
 app.post(`/auth/login`, (req, res) => {
   console.log(req.body);
   con.query(
-    `select * from user where email_id = ?`,
+    `select * from "user" where email_id = ?`,
     [req.body.details.email],
     (err, result) => {
       console.log("result", result);
