@@ -175,8 +175,10 @@ app.get(`/api/getQuesPaperDetail/:id`, checkToken, (req, res) => {
 
 app.get("/api/getAllPaper", (req, res) => {
   con.query(
+    // `select p.ppr_id, q.qp_id, p.paper_name, q.year, p.total_ques, p.total_marks, p.total_time
+    // from cbt.question_paper q inner join papers p on q.p_id=p.ppr_id`,
     `select p.ppr_id, q.qp_id, p.paper_name, q.year, p.total_ques, p.total_marks, p.total_time
-    from cbt.question_paper q inner join papers p on q.p_id=p.ppr_id`,
+    from question_paper q inner join papers p on q.p_id=p.ppr_id`,
     (err, result) => {
       if (err) return res.send(err);
       return res.send(result);
