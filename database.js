@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 // const axios = require("axios");
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5432;
 const ConString = process.env.CONSTRING;
 
 var pg = require("pg");
@@ -13,6 +13,9 @@ var conString =
   // "postgres://vuyeeooi:xTfmMuovk2vTOJs4NJh28rU7mWFXA9jp@rajje.db.elephantsql.com/vuyeeooi";
   // ConString;
   "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a/cbt";
+// "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@localhost:5432/cbt";
+// "postgres://YourUserName:YourPassword@localhost:5432/YourDatabase"
+// "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt";
 var con = new pg.Client(conString);
 con.connect(function (err) {
   if (err) {
@@ -52,6 +55,7 @@ app.use(bodyParser.json());
 
 // middleware function
 checkToken = (req, res, next) => {
+  // console.log("ye req h ", req);
   console.log(dayjs().format("YYYY-MM-DD HH:mm:ss A"));
   console.log("req body token", req.get("authorization"));
   let token = req.get("authorization");
@@ -82,7 +86,7 @@ app.post("/auth/register", (req, res) => {
   console.log(req.body);
 
   con.query(
-    `insert into user (username, email_id, password, user_type) values ( ?, ?, ?, 'user')`,
+    `insert into "user" (username, email_id, password, user_type) values ( ?, ?, ?, 'user')`,
     [username, email, password],
     (err, result) => {
       if (err) {
