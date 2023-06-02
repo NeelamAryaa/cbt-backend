@@ -10,7 +10,6 @@ const ConString = process.env.CONSTRING;
 var pg = require("pg");
 
 var conString =
-  // "postgres://vuyeeooi:xTfmMuovk2vTOJs4NJh28rU7mWFXA9jp@rajje.db.elephantsql.com/vuyeeooi";
   // ConString;
   "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a/cbt";
 // "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@localhost:5432/cbt";
@@ -90,7 +89,8 @@ app.post("/auth/register", (req, res) => {
     [username, email, password],
     (err, result) => {
       if (err) {
-        return res.status(400).json({ err: "Invalid data" });
+        // return res.status(400).json({ err: "Invalid data" });
+        return res.status(400).json({ err });
 
         // console.log(err);
       }
