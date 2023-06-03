@@ -86,52 +86,49 @@ app.post("/auth/register", (req, res) => {
   console.log(req.body);
 
   con.query(
-    `insert into "user" (username, email_id, password, user_type) values ( ?, ?, ?, 'user')`,
+    `insert into "user" (username, email_id, password, user_type) values ( $1, $2, $3, 'user')`,
     [username, email, password],
     (err, result) => {
       if (err) {
         // return res.status(400).json({ err: "Invalid data" });
         return res.status(400).json({ err });
-
-        // console.log(err);
       }
       return res
         .status(201)
-        .json({ msg: `user successfully register!!!`, data: result });
+        .json({ msg: `user successfully register!!!`, data: result.msg });
     }
   );
-  // console.log(req.body.details);
 });
 
 app.post(`/auth/login`, (req, res) => {
   console.log(req.body);
   console.log(req.body.details.email);
   con.query(
-    `select * from "user" where email_id = ?`,
+    `select * from "user" where email_id = $1`,
     [req.body.details.email],
     (err, result) => {
-      console.log("result", result);
       if (err) {
         return res.json({ err });
       }
-      if (result[0] == null) {
+      if (result.rows[0] == null) {
         return res.status(403).json({ err: "Invalid Credential!!!" });
       }
 
       const checkpwd = compareSync(
         req.body.details.password,
-        result[0].password
+        result.rows[0].password
       );
+
       if (checkpwd) {
-        result.password = undefined; //not want to send with res thats why!
-        const jsontoken = sign({ checkpwd: result }, "keyhye", {
+        result.rows[0].password = undefined; //not want to send with res thats why!
+        const jsontoken = sign({ checkpwd: result.rows[0] }, "keyhye", {
           expiresIn: "24h",
         });
 
         return res.json({
           msg: "Login Successfully!!!",
-          username: result[0].username,
-          user_id: result[0].iduser,
+          username: result.rows[0].username,
+          user_id: result.rows[0].iduser,
           token: jsontoken,
         });
       } else {
@@ -211,9 +208,9 @@ app.get(`/api/getPaper/:id`, checkToken, (req, res) => {
     where qp.q_ppr_id=${req.params.id}  `,
     (err, result) => {
       if (err) return res.send(err);
-      // console.log("aise aa rha ====", result);
+      // console.log("aise aa rha ====", result.rows);
 
-      const rsult = groupBy(result, "section_name");
+      const rsult = groupBy(result.rows, "section_name");
 
       return res.send(rsult);
     }
@@ -265,7 +262,7 @@ app.post(`/api/calculateScore`, checkToken, async (req, response) => {
     (err, rslt) => {
       if (err) return response.send(err);
       console.log(rslt);
-      const rsult = groupBy(rslt, "section_name");
+      const rsult = groupBy(rslt.rows, "section_name");
       // console.log(r);
 
       answer_key = rsult;
