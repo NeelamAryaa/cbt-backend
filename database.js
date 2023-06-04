@@ -317,7 +317,7 @@ app.post(`/api/calculateScore`, checkToken, async (req, response) => {
       console.log("result======", result);
 
       con.query(
-        `insert into marks (user_id, paper_id, score, attempt_no) values (?, ?, ?, ?)`,
+        `insert into marks (user_id, paper_id, score, attempt_no) values ($1, $2, $3, $4)`,
         [user_id, id, result.total_score, new Date()],
         (err, res) => {
           if (err) {
