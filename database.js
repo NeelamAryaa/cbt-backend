@@ -207,11 +207,11 @@ app.get(`/api/getPaper/:id`, checkToken, (req, res) => {
     inner join section s on ques.sec_id=s.id
     where qp.q_ppr_id=${req.params.id}  `,
     (err, result) => {
-      if (err) return res.send(err);
-      // console.log("aise aa rha ====", result.rows);
-
+      console.log("errr", err);
+      if (err) return res.status(404).send(err);
+      console.log("aise aa rha ====", result.rows[0]);
       const rsult = groupBy(result.rows, "section_name");
-
+      if (!result.rows[0]) return res.status(404).send("Paper not found !!!");
       return res.send(rsult);
     }
   );
