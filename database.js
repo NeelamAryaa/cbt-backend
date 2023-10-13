@@ -5,13 +5,13 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 // const axios = require("axios");
 const PORT = process.env.PORT || 5432;
-const ConString = process.env.CONSTRING;
+const conString = process.env.CONSTRING;
 
 var pg = require("pg");
 
-var conString =
-  // ConString;
-  "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt?ssl=true";
+// var conString =
+//   // ConString;
+//   "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt?ssl=true";
 
 // "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@localhost:5432/cbt";
 // "postgres://YourUserName:YourPassword@localhost:5432/YourDatabase"
