@@ -11,22 +11,6 @@ var pg = require("pg");
 
 app.use(cors());
 
-// var conString =
-//   // ConString;
-//   "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt?ssl=true";
-
-// "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@localhost:5432/cbt";
-// "postgres://YourUserName:YourPassword@localhost:5432/YourDatabase"
-// "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt";
-
-// external
-// conString =
-//   "postgres://cbt_db_user:5Jef9F8LAlxCBqTRCbl1GWBqXtI2YOJu@dpg-ckklbqkl4vmc73asfieg-a.oregon-postgres.render.com/cbt_db?ssl=true";
-
-// internal
-// conString =
-//   "postgres://cbt_db_user:5Jef9F8LAlxCBqTRCbl1GWBqXtI2YOJu@dpg-ckklbqkl4vmc73asfieg-a/cbt_db?ssl=true";
-
 var con = new pg.Client(conString);
 con.connect(function (err) {
   if (err) {
