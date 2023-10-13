@@ -5,7 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 // const axios = require("axios");
 const PORT = process.env.PORT || 5432;
-// const conString = process.env.CONSTRING;
+const conString = process.env.CONSTRING;
 
 var pg = require("pg");
 
@@ -18,8 +18,8 @@ var pg = require("pg");
 // "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt";
 
 // external
-conString =
-  "postgres://cbt_db_user:5Jef9F8LAlxCBqTRCbl1GWBqXtI2YOJu@dpg-ckklbqkl4vmc73asfieg-a.oregon-postgres.render.com/cbt_db?ssl=true";
+// conString =
+//   "postgres://cbt_db_user:5Jef9F8LAlxCBqTRCbl1GWBqXtI2YOJu@dpg-ckklbqkl4vmc73asfieg-a.oregon-postgres.render.com/cbt_db?ssl=true";
 
 // internal
 // conString =
