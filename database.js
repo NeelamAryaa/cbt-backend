@@ -9,6 +9,8 @@ const conString = process.env.CONSTRING;
 
 var pg = require("pg");
 
+app.use(cors());
+
 // var conString =
 //   // ConString;
 //   "postgres://neelam:uelKXXC104yXBoGVJibM66m6OwOEbYEI@dpg-chejv82k728m8k5bivd0-a.oregon-postgres.render.com/cbt?ssl=true";
@@ -55,8 +57,6 @@ const dayjs = require("dayjs");
 //   database: process.env.DATABASE,
 //   port: process.env.PORT,
 // });
-
-app.use(cors());
 
 // Configuring body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
