@@ -10,8 +10,6 @@ const conString = process.env.CONSTRING;
 var pg = require("pg");
 
 app.use(cors());
-// conString =
-//   "postgres://cbt_db_user:5Jef9F8LAlxCBqTRCbl1GWBqXtI2YOJu@dpg-ckklbqkl4vmc73asfieg-a.oregon-postgres.render.com/cbt_db?ssl=true";
 
 var con = new pg.Client(conString);
 con.connect(function (err) {
@@ -33,7 +31,6 @@ const { sign, verify, decode } = require("jsonwebtoken");
 
 dotenv.config({ path: "./.env" });
 
-// const { createConnection } = require("mysql2");
 const dayjs = require("dayjs");
 
 // const con = createConnection({
@@ -50,7 +47,6 @@ app.use(bodyParser.json());
 
 // middleware function
 checkToken = (req, res, next) => {
-  // console.log("ye req h ", req);
   console.log(dayjs().format("YYYY-MM-DD HH:mm:ss A"));
   console.log("req body token", req.get("authorization"));
   let token = req.get("authorization");
