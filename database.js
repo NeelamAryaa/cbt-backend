@@ -3,11 +3,13 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const pg = require("pg");
 // const axios = require("axios");
-const PORT = process.env.PORT || 5432;
-const conString = process.env.CONSTRING;
 
-var pg = require("pg");
+// const PORT = process.env.PORT;
+const PORT = 3000;
+
+const conString = process.env.CONSTRING;
 
 app.use(cors());
 

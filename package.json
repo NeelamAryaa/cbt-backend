@@ -5,7 +5,7 @@
   "main": "database.js",
   "scripts": {
     "start": "node database.js",
-    "devStart": "nodemon database.js",
+    "devStart": "nodemon database.js --delay 1500ms",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i"
   },
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0",
     "nodemon": "^2.0.21",
-    "pg": "^8.11.0"
+    "pg": "^8.11.3",
+    "pg-promise": "^11.5.4"
   }
 }
