@@ -3,15 +3,24 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-// const axios = require("axios");
-const PORT = process.env.PORT || 5432;
+dotenv.config({ path: "./.env" });
+const { genSaltSync, hashSync, compareSync } = require("bcrypt");
+const { sign, verify } = require("jsonwebtoken");
+
+const dayjs = require("dayjs");
+
+const PORT = process.env.PORT || 5000;
 const conString = process.env.CONSTRING;
+const tokenKey = process.env.TOKEN_KEY;
 
 var pg = require("pg");
 
 app.use(cors());
 
-var con = new pg.Client(conString);
+const con = new pg.Client({
+  connectionString: `${conString}`,
+});
+
 con.connect(function (err) {
   if (err) {
     return console.error("could not connect to postgres", err);
@@ -21,25 +30,8 @@ con.connect(function (err) {
       return console.error("error running query", err);
     }
     console.log(result.rows[0].theTime);
-    // >> output: 2018-08-23T14:02:57.117Z
-    // con.end();
   });
 });
-
-const { genSaltSync, hashSync, compareSync } = require("bcrypt");
-const { sign, verify, decode } = require("jsonwebtoken");
-
-dotenv.config({ path: "./.env" });
-
-const dayjs = require("dayjs");
-
-// const con = createConnection({
-//   host: process.env.DATABASE_HOST,
-//   user: process.env.DATABASE_USER,
-//   password: process.env.DATABASE_PASSWORD,
-//   database: process.env.DATABASE,
-//   port: process.env.PORT,
-// });
 
 // Configuring body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,7 +45,7 @@ checkToken = (req, res, next) => {
   console.log("token", token);
   if (token) {
     token = token.slice(7);
-    verify(token, "keyhye", (err, decode) => {
+    verify(token, tokenKey, (err, decode) => {
       if (err) {
         return res.json({
           msg: "Invalid token",
@@ -113,7 +105,7 @@ app.post(`/auth/login`, (req, res) => {
 
       if (checkpwd) {
         result.rows[0].password = undefined; //not want to send with res thats why!
-        const jsontoken = sign({ checkpwd: result.rows[0] }, "keyhye", {
+        const jsontoken = sign({ checkpwd: result.rows[0] }, tokenKey, {
           expiresIn: "24h",
         });
 
@@ -194,14 +186,14 @@ const groupBy = (array, key) => {
 app.get(`/api/getPaper/:id`, checkToken, (req, res) => {
   console.log("======check token ==========", checkToken);
   con.query(
-    `select ques.qid, ques.question, ques.options, s.section_name from ques_in_quespaper qp  
-    inner join questions ques on qp.ques_id=ques.qid 
+    `select ques.qid, ques.question, ques.options, s.section_name from ques_in_quespaper qp
+    inner join questions ques on qp.ques_id=ques.qid
     inner join section s on ques.sec_id=s.id
     where qp.q_ppr_id=${req.params.id}  `,
     (err, result) => {
       console.log("errr", err);
       if (err) return res.status(404).send(err);
-      console.log("aise aa rha ====", result.rows[0]);
+
       const rsult = groupBy(result.rows, "section_name");
       if (!result.rows[0]) return res.status(404).send("Paper not found !!!");
       return res.send(rsult);
@@ -209,10 +201,10 @@ app.get(`/api/getPaper/:id`, checkToken, (req, res) => {
   );
 });
 
-app.get("/api/getAnswerKey/:id", (req, res) => {
+app.get("/api/getAnswerKey/:id", checkToken, (req, res) => {
   con.query(
-    `select ques.qid, s.section_name, ques.answer from ques_in_quespaper qp 
-    inner join questions ques on qp.ques_id=ques.qid 
+    `select ques.qid, s.section_name, ques.answer from ques_in_quespaper qp
+    inner join questions ques on qp.ques_id=ques.qid
     inner join section s on ques.sec_id=s.id
     where qp.q_ppr_id=${req.params.id}`,
     (err, result) => {
@@ -247,8 +239,8 @@ app.post(`/api/calculateScore`, checkToken, async (req, response) => {
   const total_no_of_ques = Object.keys(answer).length;
 
   con.query(
-    `select ques.qid, s.section_name, ques.answer from ques_in_quespaper qp 
-    inner join questions ques on qp.ques_id=ques.qid 
+    `select ques.qid, s.section_name, ques.answer from ques_in_quespaper qp
+    inner join questions ques on qp.ques_id=ques.qid
     inner join section s on ques.sec_id=s.id
     where qp.q_ppr_id=${id}`,
     (err, rslt) => {
@@ -327,12 +319,12 @@ app.post(`/api/calculateScore`, checkToken, async (req, response) => {
   );
 });
 
-app.get("/api/getScore", (req, res) => {
+app.get("/api/getScore", checkToken, (req, res) => {
   console.log("getscore", result);
   res.send(result);
 });
 
-app.listen(PORT, "0.0.0.0", (err) => {
+app.listen(PORT, (err) => {
   if (err) console.log(err);
   console.log(`app is running on ${PORT}`);
 });
