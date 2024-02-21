@@ -17,11 +17,7 @@ const tokenKey = process.env.TOKEN_KEY;
 const pg = require("pg");
 // const axios = require("axios");
 
-
 // const PORT = process.env.PORT;
-const PORT = 3000;
-
-const conString = process.env.CONSTRING;
 
 app.use(cors());
 
