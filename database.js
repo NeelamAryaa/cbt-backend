@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 dotenv.config({ path: "./.env" });
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
@@ -13,7 +14,14 @@ const PORT = process.env.PORT || 5000;
 const conString = process.env.CONSTRING;
 const tokenKey = process.env.TOKEN_KEY;
 
-var pg = require("pg");
+const pg = require("pg");
+// const axios = require("axios");
+
+
+// const PORT = process.env.PORT;
+const PORT = 3000;
+
+const conString = process.env.CONSTRING;
 
 app.use(cors());
 
